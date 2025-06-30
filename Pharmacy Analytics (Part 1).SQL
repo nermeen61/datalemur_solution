@@ -6,7 +6,6 @@ Definition:
 
 cogs stands for Cost of Goods Sold which is the direct cost associated with producing the drug.
 Total Profit = Total Sales - Cost of Goods Sold
-If you like this question, try out Pharmacy Analytics (Part 2)!
 
 pharmacy_sales Table:
 Column Name	Type
