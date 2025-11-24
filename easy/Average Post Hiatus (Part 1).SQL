@@ -18,6 +18,7 @@ Example Output:
 user_id	days_between
 151652	2
 661093	21 */
+Solution 
 SELECT 
    user_id,
    MAX(post_date::date)-MIN(post_date::date) AS days_between
