@@ -24,20 +24,11 @@ employee_id	employee_name
 3	Olivia Smith
 */
 Solution
-WITH employee_mgr AS(
-      SELECT salary,employee_id
-      FROM employee
-      )
-,
-not_mgr_employee AS(
-        SELECT name,salary,
-        employee_id,
-        manager_id
-        FROM employee
-)
-    SELECT not_mgr_employee.employee_id ,name
-    FROM not_mgr_employee
-    JOIN employee_mgr
-    ON not_mgr_employee.manager_id=employee_mgr.employee_id
-    WHERE not_mgr_employee.salary > employee_mgr.salary;
+SELECT 
+  emp.employee_id AS employee_id,
+  emp.name AS employee_name
+FROM employee AS mgr
+INNER JOIN employee AS emp
+  ON mgr.employee_id = emp.manager_id
+WHERE emp.salary > mgr.salary;
 
