@@ -36,21 +36,21 @@ unique_queries	employee_count
 2	12
 3	1*/
 Solution
-WITH q3_query AS(
-    SELECT employee_id ,
-        COUNT(DISTINCT query_id) as unique_queries
-    FROM queries q
-    WHERE EXTRACT(QUARTER FROM query_starttime) = 3
-    group by employee_id)
-,
- q3_queries_all AS(
-        SELECT e.employee_id,
-            COALESCE(q.unique_queries,0) as unique_queries
-        FROM employees e
-        LEFT JOIN q3_query q
-        ON e.employee_id=q.employee_id)
-SELECT unique_queries,
-          count(*) as employee_count
-FROM q3_queries_all
-GROUP BY unique_queries
-ORDER by unique_queries;
+WITH CTE AS( 
+SELECT 
+    COALESCE(COUNT(DISTINCT query_id),0) AS unique_queries
+    ,e.employee_id
+FROM employees AS e
+left JOIN queries as q
+    ON e.employee_id=q.employee_id
+    AND EXTRACT(quarter FROM query_starttime)=3 
+    AND EXTRACT(year FROM query_starttime)=2023
+GROUP BY e.employee_id)
+
+
+SELECT 
+    unique_queries,
+    COUNT(employee_id) AS employee_count
+FROM cte 
+GROUP by unique_queries
+ORDER BY unique_queries,employee_count;
