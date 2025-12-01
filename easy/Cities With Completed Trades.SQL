@@ -38,15 +38,13 @@ San Francisco	3
 Boston	2
 Denver	1*/
 Soultion 
-WITH sub AS(
-      SELECT city, COUNT(status) AS order_completed 
-      From trades t
-      JOIN users u 
-      ON t.user_id=u.user_id
-      WHERE status ='Completed'
-      GROUP BY city
-      )
-SELECT city,max(order_completed) AS total_orders FROM sub
-GROUP BY city
+SELECT
+     u.city,
+     count(status) AS total_orders
+FROM trades t
+INNER JOIN users u
+     ON t.user_id=u.user_id
+AND t.status='Completed'
+GROUP BY u.city
 ORDER BY total_orders DESC
-limit 3;
+LIMIT 3;
