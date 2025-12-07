@@ -22,24 +22,17 @@ appliance	washing machine	219.80
 electronics	vacuum	341.00
 electronics	wireless headset	249.90*/
 Solution
-WITH totals AS (
-  SELECT 
-    category, 
-    product, 
-    SUM(spend) AS total_spend 
-  FROM product_spend 
-  WHERE EXTRACT(YEAR FROM transaction_date) = 2022
-  GROUP BY category, product
-),
-ranked AS (
-  SELECT *,
-         RANK() OVER (
-           PARTITION BY category 
-           ORDER BY total_spend DESC
-         ) AS ranking
-  FROM totals
-)
-SELECT category, product, total_spend
-FROM ranked
-WHERE ranking <= 2
+WITH cte  AS(
+      SELECT category,
+      product,
+      SUM(spend) AS total_spend,
+      RANK() OVER(PARTITION BY category ORDER BY SUM(spend) DESC) AS ranking
+
+FROM product_spend
+      WHERE EXTRACT(YEAR FROM transaction_date)='2022'
+      GROUP by category,product)
+SELECT category,product,total_spend
+FROM cte 
+WHERE ranking <=2
 ORDER BY category, ranking;
+
